@@ -118,17 +118,26 @@
 				angular.forEach(panelList, function(panel, key) {
 
 					//get template
-					$http.get(panel.templateUrl).success(function (template) {
+				    if (panel.templateUrl) {
+				        $http.get(panel.templateUrl).success(function (template) {
 
-						//panel template
-						var template = '<div style="' + panels.style(panel) + '" class="panels panel-' + panel.position + '" data-ng-class="{open : panels.opened==\'' + panel.id + '\'}"  data-ng-controller="' + panel.controller + '">' + template + '</div>';
-						//compile template
-						var compiled = $compile(template)(scope);
-						//add compiled template
-						element.append(compiled);
-						//save selector
-						panelList[key].element = angular.element(compiled);
-					});
+				            //panel template
+				            var template = '<div style="' + panels.style(panel) + '" class="panels panel-' + panel.position + '" data-ng-class="{open : panels.opened==\'' + panel.id + '\'}"  data-ng-controller="' + panel.controller + '">' + template + '</div>';
+				            //compile template
+				            var compiled = $compile(template)(scope);
+				            //add compiled template
+				            element.append(compiled);
+				            //save selector
+				            panelList[key].element = angular.element(compiled);
+				        });
+				    } else if (panel.template) {
+				        var template = '<div style="' + panels.style(panel) + '" class="panels panel-' + panel.position + '" data-ng-class="{open : panels.opened==\'' + panel.id + '\'}"  data-ng-controller="' + panel.controller + '">' + panel.template + '</div>';
+				        var compiled = $compile(template)(scope);
+				        //add compiled template
+				        element.append(compiled);
+				        //save selector
+				        panelList[key].element = angular.element(compiled);
+				    }
 				});
 				
 				//add dim
